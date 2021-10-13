@@ -34,6 +34,7 @@ class Transaction:
 
 
 
+
 class ouput:
     adresses=[] # hashes
     amount = 0
