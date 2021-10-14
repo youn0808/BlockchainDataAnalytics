@@ -1,12 +1,31 @@
-from typing import List, Any
+from datetime import datetime
+
+class Blockchain:
+    Blockchain_size=0;
+    timestamp=0
+
+    def create_new_block(self,nonce_x,previous_blockhash_y,hash_z):
+        m= Block(nonce_x,previous_blockhash_y,hash_z)
+        self.Blockchain_size+=1
+        self.timestamp=datetime.now()
+
 
 
 class Block:
     blockheight=0
     previous_blockhash=0
     nonce=0
-    time=0
+    timestamp = 0
     transactionlist=[]
+
+
+    def __init__(self,nonce,previous_blockhash, hash):
+        self.nonce=nonce
+        self.previous_blockhash=previous_blockhash
+        self.hash=hash
+        self.timestamp = datetime.now()
+
+
 
 class Transaction:
     hash_of_transaction=0
