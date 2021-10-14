@@ -1,15 +1,14 @@
 from datetime import datetime
 
 class Blockchain:
+    chain=[]
     Blockchain_size=0;
     timestamp=0
 
     def create_new_block(self,nonce_x,previous_blockhash_y,hash_z):
         m= Block(nonce_x,previous_blockhash_y,hash_z)
         self.Blockchain_size+=1
-        self.timestamp=datetime.now()
-
-
+        self.append(m)
 
 class Block:
     blockheight=0
