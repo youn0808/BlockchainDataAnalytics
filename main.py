@@ -1,37 +1,5 @@
 from datetime import datetime
 
-class Blockchain:
-    chain=[]
-    Blockchain_size=0;
-    timestamp=0
-
-    def create_new_block(self,nonce_x,previous_blockhash_y,hash_z):
-        newblock= Block(nonce_x,previous_blockhash_y,hash_z)
-        self.Blockchain_size+=1
-        self.append(newblock)
-
-class Block:
-    blockheight=0
-    previous_blockhash=0
-    nonce=0
-    timestamp = 0
-    transactionlist=[]
-
-
-    def __init__(self,nonce,previous_blockhash, hash):
-        self.nonce=nonce
-        self.previous_blockhash=previous_blockhash
-        self.hash=hash
-        self.timestamp = datetime.now()
-
-    def create_new_transaction(self,amount,sender,receiver):
-        new_transaction= Transaction(amount,sender,receiver)
-        self.transactionlist.append(new_transaction)
-
-
-
-
-
 class Transaction:
     hash_of_transaction=0
     sender_addressess="" #type address
@@ -52,12 +20,50 @@ class Transaction:
     def total_output(self):
         return Transaction.output_trans
 
-    def verify_linked_input_transactions(self):
+    #def verify_linked_input_transactions(self):
 
 
 
-    def input_of_current_transaction_address(self,previous_transaction):
-        if(previous_transaction.outputs_trans)
+   # def input_of_current_transaction_address(self,previous_transaction):
+
+
+class Block:
+    blockheight=0
+    previous_blockhash=0
+    nonce=0
+    timestamp = 0
+    transactionlist=[]
+
+
+    def __init__(self,nonce,previous_blockhash, hash):
+        self.nonce=nonce
+        self.previous_blockhash=previous_blockhash
+        self.hash=hash
+        self.timestamp = datetime.now()
+
+    def create_new_transaction(self,amount,sender,receiver):
+        new_transaction= Transaction(amount,sender,receiver)
+        self.transactionlist.append(new_transaction)
+
+
+class Blockchain:
+    chain=[]
+    Blockchain_size=0;
+    timestamp=0
+
+    def create_new_block(self,nonce_x,previous_blockhash_y,hash_z):
+        newblock= Block(nonce_x,previous_blockhash_y,hash_z)
+        self.Blockchain_size+=1
+        self.append(newblock)
+
+
+
+    def getLastBlock(self)-> Block:
+        return self.chain[self.Blockchain_size]
+
+    def Create_New_Trsansaction(self) -> None :
+        return self.getLastBlock().create_new_transaction
+
 
 
 class ouput:
