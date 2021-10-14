@@ -2,28 +2,23 @@ from typing import List, Any
 
 
 class Block:
-    time_of_transactions = 0
-    hash_transactions=[]
-    address=[]
-    transaction_id=[]
-    def len_of_transaction(self):
-        return len(Block.transaction_id)
-
-class list_of_transaction:
-
+    blockheight=0
+    previous_blockhash=0
+    nonce=0
+    time=0
+    transactionlist=[]
 
 class Transaction:
-
-    inputs_trans =[] # type input
-    outputs_trans=[] # type input
-    total_input_amount = 0
-    total_output_amount = 0
+    hash_of_transaction=0
+    sender_addressess=[] #type address
+    reciever_addressess=[] #type address
+    time_stamp_of_linking = 0 #UNIXTIMECODE
 
     def total_input(self):
         return sum(Transaction.input_trans)
 
     def total_output(self):
-        return sum(Transaction.output_trans)
+        return Transaction.output_trans
 
     def verify_linked_input_transactions(self):
 
@@ -33,21 +28,30 @@ class Transaction:
         if(previous_transaction.outputs_trans)
 
 
-
-
 class ouput:
-    adresses=[] # hashes
+    adresses=[]             #The array should contain all the sent out addresses of a previous transaction
     amount = 0
+    releasingtime=0
 
-    def __init__(self,amount_in):
+    def __init__(self,amount_in,time):
         self.amount = amount_in
+        self.releasingtime=time
+
+    def totalamount(self,transaction):
+        return sum(addresss[transaction.inputs_trans])
+
 
     def specific_output(self,input_address):
         return self.adresses.index(input_address)
 
 
 class intput:
-    amount = 0;
+    amount = 0;            #This is for current trnsaction
+
+class address:  #each address
+    Bitcoin_amount=0
+    address=""
+    def getamount(self): return self.Bitcoin_amount;
 
 
 
