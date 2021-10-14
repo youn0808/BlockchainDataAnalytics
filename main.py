@@ -6,9 +6,9 @@ class Blockchain:
     timestamp=0
 
     def create_new_block(self,nonce_x,previous_blockhash_y,hash_z):
-        m= Block(nonce_x,previous_blockhash_y,hash_z)
+        newblock= Block(nonce_x,previous_blockhash_y,hash_z)
         self.Blockchain_size+=1
-        self.append(m)
+        self.append(newblock)
 
 class Block:
     blockheight=0
@@ -24,13 +24,27 @@ class Block:
         self.hash=hash
         self.timestamp = datetime.now()
 
+    def create_new_transaction(self,amount,sender,receiver):
+        new_transaction= Transaction(amount,sender,receiver)
+        self.transactionlist.append(new_transaction)
+
+
+
 
 
 class Transaction:
     hash_of_transaction=0
-    sender_addressess=[] #type address
-    reciever_addressess=[] #type address
+    sender_addressess="" #type address
+    reciever_addressess="" #type address
     time_stamp_of_linking = 0 #UNIXTIMECODE
+
+
+    def __init__(self,hash_of_tran,sender_add,reciever_addr):
+        self.hash_of_transaction=hash_of_tran
+        self.sender_addressess=sender_add
+        self.reciever_addressess=reciever_addr
+
+
 
     def total_input(self):
         return sum(Transaction.input_trans)
