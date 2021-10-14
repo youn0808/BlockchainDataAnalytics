@@ -1,3 +1,4 @@
+from _sha256 import sha256
 from datetime import datetime
 
 class Transaction:
@@ -54,15 +55,36 @@ class Blockchain:
     def create_new_block(self,nonce_x,previous_blockhash_y,hash_z):
         newblock= Block(nonce_x,previous_blockhash_y,hash_z)
         self.Blockchain_size+=1
-        self.append(newblock)
+        self.chain.append(newblock)
 
 
 
     def getLastBlock(self)-> Block:
         return self.chain[self.Blockchain_size]
 
-    def Create_New_Trsansaction(self) -> None :
-        return self.getLastBlock().create_new_transaction
+    def getCorrectBlock(self,Blockhash):
+        correctblock=0
+        for block in self.chain:
+            if(block.hash==Blockhash): correctblock=block
+        return correctblock
+
+
+    def Create_New_Trsansaction(self,Amount,sender,reciver) -> None :
+        return self.getLastBlock().create_new_transaction(Amount,sender,reciver)
+
+    def hash_block(self,previous_hash,currentData,nonce):
+        datastring=previous_hash+str(nonce)+str(currentData)+""
+        hash=sha256(datastring)
+        return hash
+
+    def proof_of_work(self,prevousblockhash,currentblockdata):
+        nonce=0
+        hash=self.hash_block(prevousblockhash,currentblockdata,nonce)
+        while(hash[0.4]!="0000"):
+            nonce++1
+            hash=self.hash_block(prevousblockhash,currentblockdata,nonce)
+
+        return nonce
 
 
 
