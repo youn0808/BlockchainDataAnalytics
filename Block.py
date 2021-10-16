@@ -12,3 +12,9 @@ class Block:
     def compute_hash(self):
         block_string = json.dumps(self.__dict__, sort_keys=True)
         return sha256(block_string.encode()).hexdigest()
+
+    def add_transaction_at(self, transaction):
+        self.transactions.append(transaction)
+
+    def get_transaction_at(self, index):
+        return self.transactions[index]
