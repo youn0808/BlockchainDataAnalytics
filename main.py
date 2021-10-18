@@ -1,4 +1,5 @@
 import uuid
+import Transaction
 from _sha256 import sha256
 from datetime import datetime
 import time

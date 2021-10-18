@@ -14,8 +14,8 @@ class Transaction:
     def __init__(self, unix_time_transaction, hash_of_tran, amount = 0):
         self.unix_time_transaction = unix_time_transaction
         self.hash_of_transaction = hash_of_tran
-        self.sender_addressess = []
-        self.reciver_addressess = []
+        self.sender_addressess = []     # list of input transaction hashes with index
+        self.reciver_addressess = []    #list of output transaction hashes with index
         self.amount = amount
 
     class Input:
@@ -24,15 +24,16 @@ class Transaction:
             self.index = index
 
     class Output:
-        def __init__(self, amount=None):
+        def __init__(self, hash_of_output, amount=None):
             self.amount = amount
+            self.hash_of_output = hash_of_output
 
     def add_input(self, prev_hash, index):
         sender_addr = Transaction.Input(prev_hash, index)  # get input address
         self.sender_addressess.append(sender_addr)
 
-    def add_output(self, amount):
-        reciver_addr = Transaction.Output(amount)
+    def add_output(self, hash_of_output, amount):
+        reciver_addr = Transaction.Output(hash_of_output, amount)
         self.reciver_addressess.append(reciver_addr)
 
     def get_hash(self):
