@@ -15,8 +15,8 @@ class Transaction:
     def __init__(self, unix_time_transaction, hash_of_tran):
         self.unix_time_transaction = unix_time_transaction
         self.hash_of_transaction = hash_of_tran  # id
-        self.sender_addressess = np.array(0)  # list of input transaction hashes with index [(hash_of_prev_tran,index)]
-        self.reciver_addressess = np.array(0)  # list of output transaction hashes with index [(hash_of_output,bitcoin)]
+        self.sender_addressess = []  # list of input transaction hashes with index [(hash_of_prev_tran,index)]
+        self.reciver_addressess = []  # list of output transaction hashes with index [(hash_of_output,bitcoin)]
         self.totalamount = 0
         self.totaloutgoingamount = 0
         self.index = 0
@@ -33,8 +33,10 @@ class Transaction:
 
     def current_transaction_sender_addressess_and_amounts(self, next_hash_of_transaction, bitcoin):
         # if self.totaloutgoingamount<self.totalamount:
-        self.sender_addressess.insert(self.index+1, [next_hash_of_transaction, bitcoin])
-        self.index += 1
+        if(next_hash_of_transaction!='',bitcoin!=''):
+
+            self.sender_addressess.insert(self.index, [next_hash_of_transaction,bitcoin])
+            self.index += 1
         # else:
         #     print("Error")
 

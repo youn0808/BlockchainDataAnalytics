@@ -1,5 +1,5 @@
 import time
-import Block
+from Block import Block
 
 
 class Blockchain:
@@ -12,7 +12,7 @@ class Blockchain:
         self.create_genesis_block()
 
     def create_genesis_block(self):
-        genesis_block = Block(0, [], time.time(), "0")
+        genesis_block = Block(0, [], time.time(), "0") #index,previous_hashes,time_stamp,validhash
         genesis_block.hash = genesis_block.compute_hash()
         self.chain.append(genesis_block)
 
@@ -44,6 +44,9 @@ class Blockchain:
 
     def add_new_transaction(self, transaction):
         self.unconfirmed_transactions.append(transaction)
+
+    def isEmpty(self):
+        return len(self.chain)==0
 
     def mine(self):
         if not self.unconfirmed_transactions:
