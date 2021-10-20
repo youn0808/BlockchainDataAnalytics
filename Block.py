@@ -13,15 +13,24 @@ class Block:
         self.nonce = 0
 
     def compute_hash(self):
+        '''
+        :return: hash of the block
+        '''
         block_string = json.dumps(self.__dict__, sort_keys=True)
         return sha256(block_string.encode()).hexdigest()
 
     def get_MBsize(self):
-
+        '''
+        :return: value: return size of block
+        '''
         value= sys.getsizeof(self.list_of_transactions)/(1024*1024)
         return value
 
     def add_element(self, Transaction):
+        '''
+        :param Transaction:
+        :return: if we can find exist transaction hash, then add the transaction into the block. and return T/F
+        '''
         if(self.get_corrrect_element(Transaction.get_hash())==False):
             self.list_of_transactions.append(Transaction)
             return True
@@ -29,6 +38,9 @@ class Block:
             return False
 
     def get_corrrect_element(self, hash):
+        '''
+        search transaction list and if the list of trnasaction has the hash(parameter) then update the transaction
+        '''
         if(len(self.list_of_transactions)!=0):
 
             for i in self.list_of_transactions: #searching trnasaction list
