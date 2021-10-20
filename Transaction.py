@@ -1,4 +1,5 @@
 import time
+import numpy as np
 
 
 class Transaction:
@@ -11,36 +12,36 @@ class Transaction:
       timestamp : unix time code
       """
 
-    def __init__(self, unix_time_transaction, hash_of_tran, amount = 0):
+    def __init__(self, unix_time_transaction, hash_of_tran):
         self.unix_time_transaction = unix_time_transaction
-        self.hash_of_transaction = hash_of_tran
-        self.sender_addressess = []     # list of input transaction hashes with index
-        self.reciver_addressess = []    #list of output transaction hashes with index
-        self.amount = amount
+        self.hash_of_transaction = hash_of_tran  # id
+        self.sender_addressess = np.array(0)  # list of input transaction hashes with index [(hash_of_prev_tran,index)]
+        self.reciver_addressess = np.array(0)  # list of output transaction hashes with index [(hash_of_output,bitcoin)]
+        self.totalamount = 0
+        self.totaloutgoingamount = 0
+        self.index = 0
 
-    class Input:
-        def __init__(self, prev_hash=None, index=None):
-            self.prev_hash = prev_hash
-            self.index = index
-
-    class Output:
-        def __init__(self, hash_of_output, amount=None):
-            self.amount = amount
-            self.hash_of_output = hash_of_output
-
-    def add_input(self, prev_hash, index):
-        sender_addr = Transaction.Input(prev_hash, index)  # get input address
-        self.sender_addressess.append(sender_addr)
-
-    def add_output(self, hash_of_output, amount):
-        reciver_addr = Transaction.Output(hash_of_output, amount)
-        self.reciver_addressess.append(reciver_addr)
 
     def get_hash(self):
         return self.hash_of_transaction
 
     def get_input(self, index):
-        return self.inputs[index]
+        return self.sender_addressess[index]
 
     def get_output(self, index):
-        return self.outputs[index]
+        return self.reciver_addressess[index]
+
+    def current_transaction_sender_addressess_and_amounts(self, next_hash_of_transaction, bitcoin):
+        # if self.totaloutgoingamount<self.totalamount:
+        self.sender_addressess.insert(self.index+1, [next_hash_of_transaction, bitcoin])
+        self.index += 1
+        # else:
+        #     print("Error")
+
+
+    def current_transaction_reciver_address_and_amount(self, bitcoins):
+        self.totalamount += bitcoins
+
+    def reciving_from(self, hash_of_previous_transaction, index):
+        return self.current_transaction_reciver_address_and_amount(
+            hash_of_previous_transaction.sender_addresses[index][1])
