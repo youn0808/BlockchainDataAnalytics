@@ -45,5 +45,5 @@ class Transaction:
         self.totalamount += bitcoins
 
     def reciving_from(self, hash_of_previous_transaction, index):
-        return self.current_transaction_reciver_address_and_amount(
-            hash_of_previous_transaction.sender_addresses[index][1])
+
+        return self.current_transaction_reciver_address_and_amount(hash_of_previous_transaction.sender_addresses[index][1])

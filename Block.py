@@ -44,9 +44,15 @@ class Block:
         if(len(self.list_of_transactions)!=0):
 
             for i in self.list_of_transactions: #searching trnasaction list
+                print('working')
                 if i.get_hash() == hash:    # if there is already existing transaction, we just need to update the trans
                     return i
-                else:
-                    break# i is trnasaction
-        else:
-            return False
+
+        return False
+
+    def reciving_from(self, hash_of_previous_transaction, index ,Current_Transaction):
+            Transaction=self.get_corrrect_element(hash_of_previous_transaction)
+            if(Transaction!=False):
+                return Current_Transaction.current_transaction_reciver_address_and_amount(self.get_corrrect_element(hash_of_previous_transaction).sender_addresses[index][1])
+            else:
+                print ("Transaction is not found")
