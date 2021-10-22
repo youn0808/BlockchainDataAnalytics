@@ -47,7 +47,6 @@ class Block:
                 print('working')
                 if i.get_hash() == hash:    # if there is already existing transaction, we just need to update the trans
                     return i
-
         return False
 
     def reciving_from(self, hash_of_previous_transaction, index ,Current_Transaction):
