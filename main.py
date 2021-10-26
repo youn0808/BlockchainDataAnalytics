@@ -9,8 +9,6 @@ import errno
 from re import search
 from Block import Block
 
-
-
 def main():
     #create genesis block in blockchain
     block_list = Blockchain()
