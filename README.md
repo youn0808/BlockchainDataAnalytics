@@ -10,7 +10,21 @@ and create a blockchain trnasaction network.
 python main.py
 ```
 
+# Instructions to run the code:
+...............................
 
+Data Organization:
+..................
+1. A data folder exists in the same directory where Python files are located
+2. Put edges2015 folder inside data directory. All input and output files should be under edges2015 folder.
+3. For the darknet data, put the unzipped grams folder inside data directory
+4. There should be a folder named intermediate_data inside data directory which is initially empty
+
+Running Python Files:
+....................
+1. At first, run load_network.py file. It should write some file inside intermediate_data directory. Don't delete those files.
+2. Secondly, run load_darknet.py file. It should also write some file inside intermediate_data directory. Don't delete those files.
+3. At last, run get_features.py file. It will extract necessary features and write to a CSV file named output_features.csv. This csv file will be availabel inside data directory.
 
 ## Features:
 ........
