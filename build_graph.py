@@ -12,32 +12,36 @@ def loadData():
 	output_files = ["outputs2015_1.txt", "outputs2015_2.txt", "outputs2015_3.txt", "outputs2015_4.txt", "outputs2015_5.txt", "outputs2015_6.txt", 
 	"outputs2015_7.txt", "outputs2015_8.txt", "outputs2015_9.txt", "outputs2015_10.txt", "outputs2015_11.txt", "outputs2015_12.txt"]
 
-	transCount = 0
-	addrCount = 0
-	transactions = defaultdict(lambda: -1)
+	transCount = 0 #number of transactions
+	addrCount = 0 #number of address
+	transactions = defaultdict(lambda: -1) #using defaultdict to handling missing key
 	addressDict = defaultdict(lambda: -1)
-	inTransaction = defaultdict(lambda: [])
-	inAddress = defaultdict(lambda: [])
+	inTransaction = defaultdict(lambda: []) #Intrnasction store list of {txn_ID:[all_incomming_txnID]}
+	inAddress = defaultdict(lambda: [])  #InAddress store list of {txn_ID:[all incomming address's index]}
+
 	addressList = []
 	outAddress = []
 	outWeight = []
 
+	# read output file
 	for filename in output_files:
 		outputData = open(data_dir + filename)
+		# read data line by line
 		for line in outputData:
+			# split data by tab
 			values = line.split("\t")
-			if transactions[values[1]] == -1:
-				transactions[values[1]] = transCount
+			if transactions[values[1]] == -1: # if hash of transaction does not exist, add it into the transactions
+				transactions[values[1]] = transCount # set key is txn_hash value: count
 				transCount += 1
 
 			tempAddress = []
 			tempWeight = []
 			for i in range(2, len(values), 2):
-				if addressDict[values[i]] == -1:
-					addressDict[values[i]] = addrCount
+				if addressDict[values[i]] == -1: # if the address does not exist
+					addressDict[values[i]] = addrCount # address dict store hash of output address and count number (hashMap)
 					addressList.append(values[i])
 					addrCount += 1
-				tempAddress.append(addressDict[values[i]])
+				tempAddress.append(addressDict[values[i]]) #values[i] return hash_address, addressDict[val[i]]= Addr_ID, tempAddre store the specific hash_txns's addressess IDs.
 				tempWeight.append(values[i + 1])
 			outAddress.append(tempAddress)
 			outWeight.append(tempWeight)
@@ -45,28 +49,30 @@ def loadData():
 	for filename in input_files:
 		inputData = open(data_dir + filename)
 		for line in inputData:
+			#seperate by tab
 			values = line.split("\t")
-			if transactions[values[1]] != -1:
+			if transactions[values[1]] != -1: # if target trasn does exist move in
 				tempTrans = []
 				tempAddr = []
 				for i in range(2, len(values), 2):
 					if transactions[values[i]] != -1:
-						tempTrans.append(transactions[values[i]])
-						tempAddr.append(values[i + 1])
-				inTransaction[transactions[values[1]]] = tempTrans
+						tempTrans.append(transactions[values[i]]) # get the transaction(ID) from the list of transactions and store the ID into the tempTransaction.
+						tempAddr.append(values[i + 1]) # get the given transaction's (i)'th index's of address
+				inTransaction[transactions[values[1]]] = tempTrans # transactions[values[1]] is the current transaction , temo trans we need to look up
 				inAddress[transactions[values[1]]] = tempAddr
 	return transCount, transactions, outAddress, outWeight, inTransaction, inAddress, addressDict, addressList
 
 
 def generateGraph(transCount, transactions, outAddress, outWeight, inTransaction, inAddress, addressDict, addressList):
-	edge_list = []
-	input_addr_index = []
+	edge_list = [] #edge_list contains list of [from_txn_ID, to_txn_ID]
+	input_addr_index = [] #contains list of incomming txn's address index
 	output_addr_list = []
 	output_bitcoin_amount = []
 
-	for i in range(transCount):
+	# linking edges
+	for i in range(transCount): #loop all transactionns
 
-		for j in range(len(inTransaction[i])):
+		for j in range(len(inTransaction[i])): # len(inTransation[i]) will return the number of previous transactions
 			edge_list.append([inTransaction[i][j], i])
 			input_addr_index.append(inAddress[i][j])
 	
