@@ -5,13 +5,21 @@ import pickle
 
 
 def loadData():
-	#data_dir = "edges2010/"
-	data_dir= "/home/ashraf/blockchain/data2015/"
-	input_files = ["inputs2015_1.txt", "inputs2015_2.txt", "inputs2015_3.txt", "inputs2015_4.txt", "inputs2015_5.txt", "inputs2015_6.txt", 
-	"inputs2015_7.txt", "inputs2015_8.txt", "inputs2015_9.txt", "inputs2015_10.txt", "inputs2015_11.txt", "inputs2015_12.txt"]
-	output_files = ["outputs2015_1.txt", "outputs2015_2.txt", "outputs2015_3.txt", "outputs2015_4.txt", "outputs2015_5.txt", "outputs2015_6.txt", 
-	"outputs2015_7.txt", "outputs2015_8.txt", "outputs2015_9.txt", "outputs2015_10.txt", "outputs2015_11.txt", "outputs2015_12.txt"]
-
+	data_dir = "edges2010/"
+	# data_dir= "data/edges2015/"
+	# input_files = ["inputs2015_1.txt", "inputs2015_2.txt", "inputs2015_3.txt", "inputs2015_4.txt", "inputs2015_5.txt", "inputs2015_6.txt",
+	# "inputs2015_7.txt", "inputs2015_8.txt", "inputs2015_9.txt", "inputs2015_10.txt", "inputs2015_11.txt", "inputs2015_12.txt"]
+	# output_files = ["outputs2015_1.txt", "outputs2015_2.txt", "outputs2015_3.txt", "outputs2015_4.txt", "outputs2015_5.txt", "outputs2015_6.txt",
+	# "outputs2015_7.txt", "outputs2015_8.txt", "outputs2015_9.txt", "outputs2015_10.txt", "outputs2015_11.txt", "outputs2015_12.txt"]
+	# #
+	input_files = ["inputs2010_1.txt", "inputs2010_2.txt", "inputs2010_3.txt", "inputs2010_4.txt", "inputs2010_5.txt",
+				   "inputs2010_6.txt",
+				   "inputs2010_7.txt", "inputs2010_8.txt", "inputs2010_9.txt", "inputs2010_10.txt", "inputs2010_11.txt",
+				   "inputs2010_12.txt"]
+	output_files = ["outputs2010_1.txt", "outputs2010_2.txt", "outputs2010_3.txt", "outputs2010_4.txt",
+					"outputs2010_5.txt", "outputs2010_6.txt",
+					"outputs2010_7.txt", "outputs2010_8.txt", "outputs2010_9.txt", "outputs2010_10.txt",
+					"outputs2010_11.txt", "outputs2010_12.txt"]
 	transCount = 0 #number of transactions
 	addrCount = 0 #number of address
 	transactions = defaultdict(lambda: -1) #using defaultdict to handling missing key
