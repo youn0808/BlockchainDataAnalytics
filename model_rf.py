@@ -10,13 +10,13 @@ from sklearn.model_selection import RandomizedSearchCV
 
 
 def buildModel():
+	
 	n_estimators = [100, 150, 200, 250]
 	max_depth = [int(x) for x in np.linspace(60, 100, num = 20)]
 	min_samples_split = [2, 5, 10]
 	min_samples_leaf = [1, 2, 4]
 	bootstrap = [True, False]
 	criterion = ['entropy']
-
 
 	random_grid = {'n_estimators': n_estimators,
 	'max_depth': max_depth,
@@ -32,6 +32,7 @@ def buildModel():
 
 
 def trainModel(modelRf, trainX, trainY):
+	
 	modelRf.fit(trainX, trainY)
 	print("Best Model Parameters:", modelRf.best_params_)
 	return modelRf.best_estimator_
@@ -50,8 +51,7 @@ def testModel(modelRf, testX, testY):
 
 
 if __name__ == '__main__':
-
-	# load previously processed train and test data
+		# load previously processed train and test data
 	trainX = np.load('data/model_data/trainX.npy')
 	trainY = np.load('data/model_data/trainY.npy')
 	testX = np.load('data/model_data/testX.npy')
@@ -70,4 +70,6 @@ if __name__ == '__main__':
 	testModel(modelRf, testX, testY)
 	end = time.time()
 	print("Total evaluation time for random forest:", (end - start), "seconds")
+
+
 
