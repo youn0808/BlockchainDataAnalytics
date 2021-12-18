@@ -1,74 +1,89 @@
+import os
 import numpy as np
 import pandas as pd
-import time
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import precision_score
-from sklearn.metrics import recall_score
-from sklearn.metrics import f1_score
-from sklearn.model_selection import RandomizedSearchCV
-from xgboost import XGBClassifier
+from sklearn.model_selection import train_test_split
 
+# this method loads the feature dataset and convert into 80% vs 20% train and test dataset
+'''
+It splits the total data into 80% training data and 20% test data. It creates a balanced dataset where
+ratio of good address and bad address will be same in training data and test data.
+For that purpose, it first splits rows with good address and bad address.
+Then splits both good and bad data into train and test set with 80% x 20% ratio
+It generates training data by concatenating good and bad training data. generates test data similarly.
+After shuffling train and test data, it separates features and labels of training data and test data.
+labels indicate whether good adrdress or bad address. 1 indicates bad address and 0 indicates good address.
+Train feature, train labels, test features and test labels are saved as numpy arrays.
+'''
+def loadAndProcessData(data_path):
+	# load features csv file
+	data = pd.read_csv(data_path)
 
-def buildModel():
-	# set parameters range for random search of hyper parameters
-	learning_rate = [0.01, 0.05, 0.1, 0.2, 0.3]
-	max_depth = [2, 5, 6, 8, 9, 10]
-	colsample_bytree = [0.5, 0.75]
-	subsample = [0.6, 0.7, 0.8]
-	n_estimators = [10, 30, 50, 70, 100, 150, 200, 250]
-	objective = ['binary:logistic']
-	eval_metric = ['logloss']
+	# drop address serial column as it is not a feature
+	data = data.drop(columns = ['address_hash'])
 
-	random_grid = {'learning_rate': learning_rate,
-	'max_depth': max_depth,
-	'colsample_bytree': colsample_bytree,
-	'n_estimators': n_estimators,
-	'objective': objective,
-	'eval_metric': eval_metric}
+	# replace true and false values of the column 'is_bad_address' with 1 and 0
+	data["is_bad_address"].replace({True: 1, False: 0}, inplace = True)
 
+	# splitting good addresses and bad address
+	good_data = data[data['is_bad_address'] == 0]
+	bad_data = data[data['is_bad_address'] == 1]
+	data = None
 
-	model_xgb = XGBClassifier()
-	xgb_random = RandomizedSearchCV(estimator = model_xgb, param_distributions = random_grid, n_jobs = 5)
+	# splitting both good and bad data into train and test set
+	train_good, test_good = train_test_split(good_data, test_size=0.2, shuffle=True)
+	train_bad, test_bad = train_test_split(bad_data, test_size=0.2, shuffle=True)
+	good_data = None
+	bad_data = None
 
-	return xgb_random
+	# generate training data by concatenating good and bad training data
+	train_data = pd.concat([train_good, train_bad])
+	# generate test data by concatenating good and bad training data
+	test_data = pd.concat([test_good, test_bad])
 
-def trainModel(modelXgb, trainX, trainY):
-	modelXgb.fit(trainX, trainY)
-	print("Best Model Parameters:", modelXgb.best_params_)
-	return modelXgb.best_estimator_
+	# set unnecessary data to None
+	train_good = None
+	train_bad = None
+	test_good = None
+	test_bad = None
 
-def testModel(modelXgb, testX, testY):
-	y_pred = modelXgb.predict(testX)
-	predictions = [round(value) for value in y_pred]
+	# shuffle train and test data
+	train_data = train_data.sample(frac=1).reset_index(drop=True)
+	test_data = test_data.sample(frac=1).reset_index(drop=True)
+	# specifying drop=True prevents reset_index from creating a column containing the old index entries.
 
+	#convert train data and test data into numpy arrays
+	train_data = np.array(train_data)
+	test_data = np.array(test_data)
 
-	with open('data/model_data/predictions_xgb.npy', 'wb') as f:
-		np.save(f, np.array(predictions))
+	# convert data types of features and labels into int
+	train_data = train_data.astype('int')
+	test_data = test_data.astype('int')
 
-	print('Accuracy:', accuracy_score(testY, predictions))
-	print('Precision:', precision_score(testY, predictions))
-	print('Recall:', recall_score(testY, predictions))
-	print('F1 Score:', f1_score(testY, predictions))
+	# Splitting train and test data into features and labels
+	trainY = train_data[:, 6]
+	testY = test_data[:, 6]
+	trainX = np.delete(train_data, 6, 1)
+	testX = np.delete(test_data, 6, 1)
+
+	# create directory to save train and test data
+	os.mkdir('data/model_data')
+
+	# save train and test data
+	with open('data/model_data/trainX.npy', 'wb') as f:
+		np.save(f, trainX)
+	with open('data/model_data/trainY.npy', 'wb') as f:
+		np.save(f, trainY)
+	with open('data/model_data/testX.npy', 'wb') as f:
+		np.save(f, testX)
+	with open('data/model_data/testY.npy', 'wb') as f:
+		np.save(f, testY)
 
 
 if __name__ == '__main__':
 
-	# load previously processed train and test data
-	trainX = np.load('data/model_data/trainX.npy')
-	trainY = np.load('data/model_data/trainY.npy')
-	testX = np.load('data/model_data/testX.npy')
-	testY = np.load('data/model_data/testY.npy')
+	# call the loadAndProcessData function to generate train and test data and save as numpy array
+	loadAndProcessData("data/output_features.csv")
 
-	# build the random forest classifier model
-	xgb_random = buildModel()
 
-	start = time.time()
-	modelXgb = trainModel(xgb_random, trainX, trainY)
-	end = time.time()
-	print("Total training time for XGBoost:", (end - start), "seconds")
 
-	start = time.time()
-	testModel(modelXgb, testX, testY)
-	end = time.time()
-	print("Total evaluation time for XGBoost:", (end - start), "seconds")
 
