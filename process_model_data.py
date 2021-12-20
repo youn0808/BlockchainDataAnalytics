@@ -4,16 +4,6 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 # this method loads the feature dataset and convert into 80% vs 20% train and test dataset
-'''
-It splits the total data into 80% training data and 20% test data. It creates a balanced dataset where
-ratio of good address and bad address will be same in training data and test data.
-For that purpose, it first splits rows with good address and bad address.
-Then splits both good and bad data into train and test set with 80% x 20% ratio
-It generates training data by concatenating good and bad training data. generates test data similarly.
-After shuffling train and test data, it separates features and labels of training data and test data.
-labels indicate whether good adrdress or bad address. 1 indicates bad address and 0 indicates good address.
-Train feature, train labels, test features and test labels are saved as numpy arrays.
-'''
 def loadAndProcessData(data_path):
 	# load features csv file
 	data = pd.read_csv(data_path)
@@ -23,6 +13,8 @@ def loadAndProcessData(data_path):
 
 	# replace true and false values of the column 'is_bad_address' with 1 and 0
 	data["is_bad_address"].replace({True: 1, False: 0}, inplace = True)
+
+	data = data.drop_duplicates()
 
 	# splitting good addresses and bad address
 	good_data = data[data['is_bad_address'] == 0]
@@ -60,10 +52,10 @@ def loadAndProcessData(data_path):
 	test_data = test_data.astype('int')
 
 	# Splitting train and test data into features and labels
-	trainY = train_data[:, 6]
-	testY = test_data[:, 6]
-	trainX = np.delete(train_data, 6, 1)
-	testX = np.delete(test_data, 6, 1)
+	trainY = train_data[:, 5]
+	testY = test_data[:, 5]
+	trainX = np.delete(train_data, 5, 1)
+	testX = np.delete(test_data, 5, 1)
 
 	# create directory to save train and test data
 	os.mkdir('data/model_data')
@@ -83,7 +75,3 @@ if __name__ == '__main__':
 
 	# call the loadAndProcessData function to generate train and test data and save as numpy array
 	loadAndProcessData("data/output_features.csv")
-
-
-
-
